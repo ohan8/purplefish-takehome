@@ -3,7 +3,7 @@
 import { MessageType } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import ArrowUpIcon from "~/app/_components/icons/ArrowUpIcon";
 import SettingsIcon from "~/app/_components/icons/SettingsIcon";
 import UserIcon from "~/app/_components/icons/UserIcon";
