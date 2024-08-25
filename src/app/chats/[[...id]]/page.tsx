@@ -39,7 +39,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
       router.push(`/chats/${conversation.id}`);
       await utils.conversation.invalidate();
       console.log("in here handling submit with:", conversation.id, input);
-      handleSubmit();
+      // handleSubmit();
     },
   });
 
@@ -228,3 +228,4 @@ export default function ChatPage({ params }: { params: { id: string } }) {
     </div>
   );
 }
+
