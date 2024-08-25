@@ -3,7 +3,7 @@
 import { MessageType } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ArrowUpIcon from "~/app/_components/icons/ArrowUpIcon";
 import SettingsIcon from "~/app/_components/icons/SettingsIcon";
 import UserIcon from "~/app/_components/icons/UserIcon";
@@ -38,8 +38,6 @@ export default function ChatPage({ params }: { params: { id: string } }) {
       setChatId(conversation.id);
       router.push(`/chats/${conversation.id}`);
       await utils.conversation.invalidate();
-      console.log("in here handling submit with:", conversation.id, input);
-      // handleSubmit();
     },
   });
 
@@ -65,11 +63,10 @@ export default function ChatPage({ params }: { params: { id: string } }) {
       };
     }),
     onFinish: async (result) => {
-      console.log("in here i finished", result, "chatId is:", chatId);
       if (!result || !result.content || !chatId) {
         return;
       }
-      console.log("adding message");
+
       addMessage.mutate({
         conversationId: chatId,
         content: result.content,
@@ -77,6 +74,13 @@ export default function ChatPage({ params }: { params: { id: string } }) {
       });
     },
   });
+
+  // use effect to handle initial submit when new conversation is made
+  useEffect(() => {
+    if (chatId && input) {
+      handleSubmit();
+    }
+  }, [chatId]);
 
   // Used to stream the AI response
   const aiStream = chatHookMessages.filter((m) => m.role === "assistant");
@@ -228,4 +232,3 @@ export default function ChatPage({ params }: { params: { id: string } }) {
     </div>
   );
 }
-
