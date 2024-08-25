@@ -2,8 +2,6 @@
 
 import { MessageType } from "@prisma/client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import ArrowUpIcon from "~/app/_components/icons/ArrowUpIcon";
 import SettingsIcon from "~/app/_components/icons/SettingsIcon";
 import UserIcon from "~/app/_components/icons/UserIcon";
@@ -11,8 +9,10 @@ import AIResponse from "~/components/AIResponse";
 import { Button } from "~/components/ui/button";
 import UserMessage from "~/components/UserMessage";
 
-import { useChat } from "ai/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { api } from "~/trpc/react";
+import { useChat } from "ai/react";
 
 export default function ChatPage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -209,9 +209,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
                 {/* })} */}
               </div>
             ))}
-            {showStream && (
-              <AIResponse content={lastAssistantRoleHookMessage.content} />
-            )}
+            {showStream && <AIResponse content={stream} />}
           </div>
         </div>
       </div>
