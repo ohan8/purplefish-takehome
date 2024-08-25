@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback } from "./ui/avatar";
 
 export default function UserMessage({ content }: { content: string }) {
   return (
@@ -10,7 +10,6 @@ export default function UserMessage({ content }: { content: string }) {
         </div>
       </div>
       <Avatar className="h-8 w-8 border">
-        <AvatarImage src="/placeholder-user.jpg" alt="Image" />
         <AvatarFallback>ME</AvatarFallback>
       </Avatar>
     </div>

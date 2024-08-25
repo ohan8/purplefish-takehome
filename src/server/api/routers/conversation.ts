@@ -65,7 +65,7 @@ export const conversationRouter = createTRPCRouter({
     // get all conversations sorted in descending created at data
     return ctx.db.conversation.findMany({
       orderBy: { createdAt: "desc" },
-      take: 10,
+      take: 100,
     });
   }),
 
