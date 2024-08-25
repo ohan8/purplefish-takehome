@@ -19,8 +19,8 @@ export default function ChatPage({ params }: { params: { id: string } }) {
   const [chatId, setChatId] = useState<string | undefined>(
     params.id ? params.id[0] : undefined,
   );
+  const [stream, setStream] = useState<string | undefined>(undefined);
 
-  console.log("chatId is:", chatId);
   // Queries
   const { data: conversationsData } = api.conversation.getAll.useQuery();
   const conversations = conversationsData ?? [];
@@ -36,7 +36,6 @@ export default function ChatPage({ params }: { params: { id: string } }) {
   const createConversation = api.conversation.create.useMutation({
     onSuccess: async (conversation) => {
       setChatId(conversation.id);
-      router.push(`/chats/${conversation.id}`);
       await utils.conversation.invalidate();
     },
   });
@@ -44,6 +43,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
   const addMessage = api.conversation.addMessage.useMutation({
     onSuccess: async () => {
       await utils.conversation.invalidate();
+      setStream(undefined);
     },
   });
 
@@ -86,8 +86,13 @@ export default function ChatPage({ params }: { params: { id: string } }) {
   const aiStream = chatHookMessages.filter((m) => m.role === "assistant");
   const lastAssistantRoleHookMessage = aiStream[aiStream.length - 1];
   const showStream =
-    !!lastAssistantRoleHookMessage &&
-    messages[messages.length - 1]?.type == MessageType.USER;
+    !!stream && messages[messages.length - 1]?.type == MessageType.USER;
+
+  useEffect(() => {
+    const aiStream = chatHookMessages.filter((m) => m.role === "assistant");
+    const lastAssistantRoleHookMessage = aiStream[aiStream.length - 1];
+    setStream(lastAssistantRoleHookMessage?.content);
+  }, [chatHookMessages.length]);
 
   const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -130,6 +135,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
                   variant={chatId === undefined ? "default" : "ghost"}
                   className="justify-start gap-2 rounded-md px-3 py-2"
                   type="submit"
+                  onClick={() => setChatId(undefined)}
                 >
                   <div className="text-sm font-medium">New Chat</div>
                 </Button>
