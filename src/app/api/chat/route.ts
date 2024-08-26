@@ -20,8 +20,11 @@ export async function POST(req: Request) {
           const response = await fetch(apiUrl);
           const data = await response.json();
           try {
-            const result = `The weather in ${city} is ${data.current.condition.text} with a temperature of ${data.current.temp_c} degrees Celsius.`;
-            return result;
+            return {
+              city,
+              condition: data.current.condition.text,
+              temperature: data.current.temp_c,
+            };
           } catch (e) {
             return "Unable to get weather information";
           }
@@ -45,7 +48,11 @@ export async function POST(req: Request) {
           const data = await response.json();
           try {
             const result = data.conversion_rates[toCurrency];
-            return result;
+            return {
+              fromCurrency,
+              toCurrency,
+              rate: result,
+            };
           } catch (e) {
             return "Unable to get exchange rate";
           }
@@ -65,19 +72,6 @@ export async function POST(req: Request) {
           }
         },
       },
-      // // client-side tool that starts user interaction:
-      // askForConfirmation: {
-      //   description: "Ask the user for confirmation.",
-      //   parameters: z.object({
-      //     message: z.string().describe("The message to ask for confirmation."),
-      //   }),
-      // },
-      // // client-side tool that is automatically executed on the client:
-      // getLocation: {
-      //   description:
-      //     "Get the user location. Always ask for confirmation before using this tool.",
-      //   parameters: z.object({}),
-      // },
     },
   });
 
