@@ -16,7 +16,7 @@ export async function POST(req: Request) {
         description: "show the weather in a given city to the user",
         parameters: z.object({ city: z.string() }),
         execute: async ({ city }: { city: string }) => {
-          const apiUrl = `http://api.weatherapi.com/v1/current.json?key=f6ec78455c844bbd85423853242308&q=${city}`;
+          const apiUrl = `http://api.weatherapi.com/v1/current.json?key=${process.env.WEATHER_API_KEY}&q=${city}`;
           const response = await fetch(apiUrl);
           const data = await response.json();
           try {
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
           fromCurrency: string;
           toCurrency: string;
         }) => {
-          const apiUrl = `https://v6.exchangerate-api.com/v6/d149992d92240b8ee69b8ce9/latest/${fromCurrency}`;
+          const apiUrl = `https://v6.exchangerate-api.com/v6/${process.env.EXCHANGE_RATE_API_KEY}/latest/${fromCurrency}`;
           const response = await fetch(apiUrl);
           const data = await response.json();
           try {
